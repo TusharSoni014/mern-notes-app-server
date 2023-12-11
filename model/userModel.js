@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { NoteSchema } = require("./notesModel");
 
 const UserSchema = mongoose.Schema(
   {
@@ -6,6 +7,7 @@ const UserSchema = mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+      unique: true,
     },
     email: {
       type: String,
@@ -18,8 +20,14 @@ const UserSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
+    notes: [
+      {
+        type: NoteSchema,
+        ref: "notes",
+      },
+    ],
   },
-  { timestapms: true }
+  { timestamps: true }
 );
 
 const User = mongoose.model("User", UserSchema);
