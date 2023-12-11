@@ -6,11 +6,11 @@ const signup = async (req, res) => {
   try {
     const { username, email, password } = req.body;
     if (!username || !email || !password) {
-      return res.status(400).send({ message: "all fields are required" });
+      return res.status(400).send({ message: "All fields are required" });
     }
     const existingUser = await User.findOne({ email: email });
     if (existingUser) {
-      return res.status(400).send({ message: "user already exists" });
+      return res.status(400).send({ message: "User already exists" });
     }
     if (username.length > 20 || username.length < 3) {
       return res.status(400).send({ message: "Invalid username length" });
@@ -44,7 +44,10 @@ const signup = async (req, res) => {
       expires: new Date(Date.now() + 1000 * 24 * 60 * 60),
     });
 
-    return res.status(200).send({ user: user });
+    return res.status(200).send({
+      email: user.email,
+      username: user.username,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -54,13 +57,13 @@ const login = async (req, res) => {
   const { email, password } = req.body;
   const existingUser = await User.findOne({ email: email });
   if (!existingUser) {
-    return res.status(400).send({ message: "user not found" });
+    return res.status(400).send({ message: "User not found" });
   }
   const matchedPassword = await bcrypt.compare(password, existingUser.password);
   if (!matchedPassword) {
     return res
       .status(400)
-      .send({ message: "password or email didn't matched !" });
+      .send({ message: "Password or email didn't matched !" });
   }
   const token = jwt.sign(
     { email: email, _id: existingUser._id },
@@ -77,7 +80,10 @@ const login = async (req, res) => {
     expires: new Date(Date.now() + 1000 * 24 * 60 * 60),
   });
 
-  return res.status(200).send({ user: existingUser });
+  return res.status(200).send({
+    email: existingUser.email,
+    username: existingUser.username,
+  });
 };
 
 const logout = async (req, res) => {

@@ -20,12 +20,6 @@ const UserSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
-    notes: [
-      {
-        type: NoteSchema,
-        ref: "notes",
-      },
-    ],
   },
   { timestamps: true }
 );

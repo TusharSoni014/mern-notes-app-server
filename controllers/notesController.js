@@ -16,13 +16,6 @@ exports.createNote = async (req, res) => {
       owner: user._id,
     });
 
-    if (!user.notes) {
-      user.notes = [];
-    }
-
-    user.notes.push(note);
-    await user.save();
-
     return res.status(200).send({ note: note });
   } catch (error) {
     return res.status(500).send({ message: error });
@@ -36,7 +29,8 @@ exports.myAllNotes = async (req, res) => {
     if (!user) {
       return res.status(401).send({ message: "User not found!" });
     }
-    return res.status(200).send({ notes: user.notes });
+    const allNotes = await Note.find({ owner: userId });
+    return res.status(200).send({ notes: allNotes });
   } catch (error) {
     return res.status(500).send({ message: "Error getting my notes" });
   }
