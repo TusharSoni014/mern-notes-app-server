@@ -33,7 +33,7 @@ const signup = async (req, res) => {
       { email: email, _id: user._id },
       process.env.JWT_SECRET_KEY,
       {
-        expiresIn: "1d",
+        expiresIn: "7d",
       }
     );
 
@@ -69,7 +69,7 @@ const login = async (req, res) => {
     { email: email, _id: existingUser._id },
     process.env.JWT_SECRET_KEY,
     {
-      expiresIn: "1d",
+      expiresIn: "7d",
     }
   );
 
